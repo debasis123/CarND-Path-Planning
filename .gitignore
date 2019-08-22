@@ -1,12 +1,23 @@
+# silly macOS
+.DS_Store
 
-.idea/.name
-.idea/CarND-Path-Planning-Project.iml
-.idea/encodings.xml
-.idea/modules.xml
-.idea/workspace.xml
-cmake-build-debug/
-src/path_planning.cpp
-src/path_planning.h
-
-# build directory
+# build files
 build/
+
+ide_profiles/
+tutorials/
+
+# CLion
+.idea/
+cmake-build-debug/
+CMakeLists.txt
+cmakepatch.txt
+
+# sublime
+*.sublime-project
+*.sublime-workspace
+
+# others
+algorithm.txt
+set_git.sh
+.clang-tidy
