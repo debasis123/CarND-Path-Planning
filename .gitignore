@@ -1,0 +1,12 @@
+
+.idea/.name
+.idea/CarND-Path-Planning-Project.iml
+.idea/encodings.xml
+.idea/modules.xml
+.idea/workspace.xml
+cmake-build-debug/
+src/path_planning.cpp
+src/path_planning.h
+
+# build directory
+build/
