@@ -5,13 +5,11 @@
 
 #include "helpers.h"
 #include "path_planning.h"
-// #include "helpers.h"
-// #include "simulation_data.h"
+#include "simulation_data.h"
 
 #include "Eigen-3.3/Eigen/Core"
 #include "Eigen-3.3/Eigen/QR"
 #include "json.hpp"
-#include "simulation_data.h"
 
 #include <uWS/uWS.h>
 
@@ -52,7 +50,7 @@ int main()
     // ====================== read map data from file =============
 
     // Waypoints data on the highway; read from a file
-    // provided in global x,y as well as Frenet's s,d coordinates
+    // provided in GLOBAL x,y as well as Frenet's s,d coordinates
     std::string map_file("../data/highway_map.csv");
 
     // Load up map values for waypoint's x, y, s and d normalized normal vectors from the "highway_map.csv"
@@ -107,17 +105,6 @@ int main()
                     std::vector<double> next_y_vals;
                     PathPlanner planner(ego, next_x_vals, next_y_vals, map_waypoints);
                     planner.run();
-
-                    // std::cout << "next size: " << next_x_vals.size() << '\n';
-                    // next_x_vals = {};
-                    // next_y_vals = {};
-                    // double dist_inc = 0.5;
-                    // for (int i = 0; i < 50; ++i)
-                    // {
-                    //     next_x_vals.push_back(ego.x_ + (dist_inc * i) * cos(ego.yaw_));
-                    //     next_y_vals.push_back(ego.y_ + (dist_inc * i) * sin(ego.yaw_));
-                    // }
-                    // std::cout << "next size: " << next_x_vals.size() << '\n';
 
                     // =================== send data back to simulator ==================
 

@@ -2,7 +2,7 @@
  * @Author: Debasis Mandal
  * @Date:   2021-01-31 18:53:12
  * @Last Modified by:   Debasis Mandal
- * @Last Modified time: 2021-02-20 16:10:48
+ * @Last Modified time: 2021-02-20 17:15:52
  */
 
 #include "behavior_planning.h"
@@ -13,7 +13,7 @@
 
 #include <algorithm>
 #include <cassert>
-#include <iostream>
+// #include <iostream>
 #include <vector>
 
 BehaviorPlanner::BehaviorPlanner(const Ego& ego,
@@ -38,7 +38,6 @@ void BehaviorPlanner::process()
     for (const auto& state : states)
     {
         TrajectoryValues traj{}; // initialized with proper values
-        // State state("KL");
         TrajectoryGenerator trajGen(ego_, traj, map_waypoints_, predictions_, state);
         trajGen.process();
         // std::cout << "traj: " << traj.ego_lane << "   " << traj.ego_vel << "   " << traj.ego_state << "    "

@@ -2,14 +2,14 @@
  * @Author: Debasis Mandal
  * @Date:   2021-02-10 17:51:23
  * @Last Modified by:   Debasis Mandal
- * @Last Modified time: 2021-02-20 15:27:02
+ * @Last Modified time: 2021-02-20 16:59:29
  */
 
 #include "simulation_data.h"
 #include "helpers.h"
 
 #include <algorithm>
-#include <iostream>
+// #include <iostream>
 
 double g_ego_vel{0}; // mps
 int g_ego_lane{kEgoStartLane};
@@ -68,6 +68,7 @@ Ego::Ego(double x,
     yaw_ = deg2rad(yaw);
 
     // update lane and velocity to global variables
+    // we will be using these values instead of the ones coming from simulator
     lane_ = g_ego_lane;
     speed_ = g_ego_vel;
 

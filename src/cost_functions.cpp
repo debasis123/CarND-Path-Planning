@@ -1,7 +1,7 @@
 /*
  * @Author: debasis
  * @Last Modified by:   Debasis Mandal
- * @Last Modified time: 2021-02-20 15:23:48
+ * @Last Modified time: 2021-02-20 17:18:30
  */
 
 #include "cost_functions.h"
@@ -11,11 +11,10 @@
 #include <algorithm>
 #include <cmath>
 #include <functional>
-#include <iostream>
+// #include <iostream>
 #include <iterator>
 #include <map>
 
-// TODO: change weights for cost functions.
 const double REACH_GOAL = 0.5;
 const double EFFICIENCY = 0.5;
 
@@ -25,13 +24,6 @@ CostCalculator::CostCalculator(const Ego& ego, const TrajectoryValues& traj, con
     , predictions_{predictions}
 {
 }
-
-/*
-Here we have provided two possible suggestions for cost functions, but feel free to use your own!
-The weighted cost over all cost functions is computed in calculate_cost. The data from get_helper_data
-will be very useful in your implementation of the cost functions below. Please see get_helper_data
-for details on how the helper data is computed.
-*/
 
 /*
  * Cost increases based on distance of intended lane (for planning a lane change) and final lane of trajectory.

@@ -20,7 +20,6 @@ static constexpr double kTargetEgoSpeed{22};        // in m/s ( < 50 mph)
 static constexpr double kHighwayLength{3 * 6946.0}; // in m
 static constexpr double kMaxAcceleration{8.0};      // in m/s^2
 static constexpr double kMaxDeceleration{5.0};      // in m/s^2
-// static constexpr double kMaxAcceleration{0.224};  // in m/s^2
 // static constexpr double kMaxJerk{10.0};           // in m/s^3
 static constexpr double kCollisionDistance{30.0}; // in m
 static constexpr double kSafeBufferDist{20.0};    // in m

@@ -1,7 +1,7 @@
 /*
  * @Author: debasis
  * @Last Modified by:   Debasis Mandal
- * @Last Modified time: 2021-02-20 16:18:59
+ * @Last Modified time: 2021-02-20 17:17:42
  */
 
 #include "helpers.h"
@@ -10,7 +10,7 @@
 
 #include <algorithm>
 #include <cmath>
-#include <iostream>
+// #include <iostream>
 #include <utility>
 #include <vector>
 
@@ -29,13 +29,8 @@ TrajectoryGenerator::TrajectoryGenerator(const Ego& ego,
 
 void TrajectoryGenerator::process()
 {
-    // The ego car uses a perfect controller and will visit every (x,y) point in the trajectory
-    // it receives in the list every .02 seconds.
+    // GOAL: To drive closer to but less than 50 mph on any lane
 
-    // generate one trajectory based on the future state of ego car
-    // first, we generate trajectories only in s, d values, Note that these are GLOBAL COORDINATES
-
-    // GOAL: To go on the FASTEST LANE close to the speed limit of 50 mph
     if (future_state_ == "KL")
     {
         keep_lane_trajectory();
@@ -53,6 +48,7 @@ void TrajectoryGenerator::keep_lane_trajectory()
 
     if (is_vehicle_ahead(predictions_, ego_))
     {
+        // try to change lanes first
         if (ego_.lane_ > 0 && !is_vehicle_left(predictions_, ego_))
         {
             lane_change_trajectory("LCL");
@@ -61,9 +57,9 @@ void TrajectoryGenerator::keep_lane_trajectory()
         {
             lane_change_trajectory("LCR");
         }
+        // otherwise, reduce speed
         else
         {
-            // traj_.speed_diff -= kMaxAcceleration * kUnitTime;
             traj_.speed_diff -= kMaxDeceleration * kUnitTime;
         }
     }

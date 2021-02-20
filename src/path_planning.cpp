@@ -2,7 +2,7 @@
  * @Author: Debasis Mandal
  * @Date:   2021-02-07 18:26:33
  * @Last Modified by:   Debasis Mandal
- * @Last Modified time: 2021-02-20 14:03:11
+ * @Last Modified time: 2021-02-20 17:16:02
  */
 
 #include "path_planning.h"
@@ -17,7 +17,7 @@
 
 #include <cmath>
 #include <cstddef>
-#include <iostream>
+// #include <iostream>
 #include <iterator>
 #include <map>
 #include <vector>
@@ -35,7 +35,28 @@ PathPlanner::PathPlanner(Ego& ego,
 
 void PathPlanner::run()
 {
-    // TODO: algorithm
+    //
+    // =============================   ALGORITHM  ===========================
+    //
+    // GOAL: To drive ego car on the fastest possible way, close to but not exceeding the speed of 50 mph and less jerk.
+    //
+    // - we first create 5 anchor points
+    //      - first two points from previous trajectory or interpolated points
+    //      - then we compute the safe next lane based on path planning: prediction, behavior modeling, trajectory
+    //      computation and cost
+    // - use these 5 anchor points as the seed of the spline trajectory
+    // - compute 50 points from spline as the trajectory fed to the simulator
+    //
+    // To compute the next safe lane, we do the following:
+    // - first, place the ego at the end of the previous trajectory. We do that so as to reuse the previous trajectory
+    // points for smoother trajectory.
+    // - Prediction: place all agent cars around ego at that point.
+    // - Behavior Modeling: use "KL" to maintain lane or "LCL"/LCR" for lance changes to the left or right and outputs
+    // the next lane based on lowest risk.
+    // - Trajectory Generation: change lane or maintain ego speed based on behavior
+    // - Cost calculation: Compute the cost of each trajectory coming out of behavior modeling
+    //
+    //
 
     // Place the ego car at the end of the previous trajectory, if exists, since we will first follow the previous
     // trajectory by default and then add few points after that.
