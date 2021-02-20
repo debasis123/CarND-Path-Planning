@@ -1,9 +1,11 @@
 #!/bin/bash
 
-rsubl utility.h
 rsubl main.cpp
-rsubl vehicle.h
-rsubl vehicle.cpp
+rsubl helpers.h
+rsubl helpers.cpp
+rsubl simulation_data.h
+rsubl ego_trajectory.h
+rsubl ego_trajectory.cpp
 rsubl cost.h
 rsubl cost.cpp
 rsubl PTG.h
