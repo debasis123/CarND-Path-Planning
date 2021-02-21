@@ -1,7 +1,7 @@
 /*
  * @Author: debasis
  * @Last Modified by:   Debasis Mandal
- * @Last Modified time: 2021-02-20 17:18:30
+ * @Last Modified time: 2021-02-21 08:58:22
  */
 
 #include "cost_functions.h"
@@ -100,7 +100,7 @@ std::map<std::string, double> CostCalculator::get_helper_data() const
 
     double intended_lane = traj_.ego_lane;
     double final_lane = traj_.ego_lane;
-    double distance_to_goal = kHighwayLength - ego_.s_; // using ego.s, that's not exactly correct though
+    double distance_to_goal = kHighwayDistance - ego_.s_; // using ego.s, that's not exactly correct though
 
     std::map<std::string, double> trajectory_data;
     trajectory_data["intended_lane"] = intended_lane;

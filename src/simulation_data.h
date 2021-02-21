@@ -6,6 +6,8 @@
 #ifndef SIMULATION_DATA_H
 #define SIMULATION_DATA_H
 
+#include "parameters.h"
+
 #include <cassert>
 #include <cmath>
 #include <cstddef>
@@ -14,20 +16,7 @@
 #include <utility>
 #include <vector>
 
-static constexpr double kMphToMps{0.44704};
-static constexpr double kUnitTime{0.02};            // in sec (= 20 ms)
-static constexpr double kTargetEgoSpeed{22};        // in m/s ( < 50 mph)
-static constexpr double kHighwayLength{3 * 6946.0}; // in m
-static constexpr double kMaxAcceleration{8.0};      // in m/s^2
-static constexpr double kMaxDeceleration{5.0};      // in m/s^2
-// static constexpr double kMaxJerk{10.0};           // in m/s^3
-static constexpr double kCollisionDistance{30.0}; // in m
-static constexpr double kSafeBufferDist{20.0};    // in m
-static constexpr int kNumLanes{3};
-static constexpr int kEgoTargetLane{1}; // middle lane
-static constexpr int kEgoStartLane{1};
-static constexpr int kLaneWidth{4}; // in m
-
+// global variables
 extern double g_ego_vel; // mps
 extern int g_ego_lane;
 

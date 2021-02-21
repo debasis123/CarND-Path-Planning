@@ -1,7 +1,6 @@
 /*
  * @Author: debasis123
  * @Last Modified by:   debasis123
- * @Last Modified time: 2018-12-18 20:14:30
  */
 
 #ifndef HELPERS_H
@@ -68,4 +67,4 @@ bool is_vehicle_left(const Predictions& predictions, const Ego& ego);
 bool is_vehicle_right(const Predictions& predictions, const Ego& ego);
 bool is_vehicle_ahead(const Predictions& predictions, const Ego& ego);
 
-#endif
+#endif // HELPERS_H

@@ -1,7 +1,7 @@
 /*
  * @Author: debasis123
  * @Last Modified by:   Debasis Mandal
- * @Last Modified time: 2021-02-20 16:18:11
+ * @Last Modified time: 2021-02-21 12:22:50
  */
 
 #include "helpers.h"
@@ -144,17 +144,21 @@ DoublePair getXYFromFrenet(const double s,
 {
     int prev_wp = -1;
 
-    while (s > maps_s.at(prev_wp + 1) && (prev_wp < static_cast<int>(maps_s.size() - 1)))
+    // std::cout << "in...s: " << s << '\n';
+    // check that s value is within the limit of the map
+    while (prev_wp < static_cast<int>(maps_s.size() - 1) && s > maps_s.at(prev_wp + 1))
     {
         ++prev_wp;
     }
 
     auto wp2 = (prev_wp + 1) % maps_x.size();
 
-    double heading = atan2((maps_y.at(wp2) - maps_y.at(prev_wp)), (maps_x.at(wp2) - maps_x.at(prev_wp)));
-    // the x,y,s along the segment
-    double seg_s = s - maps_s.at(prev_wp);
+    // std::cout << "prev_wp: " << prev_wp << "    wp2: " << wp2 << '\n';
 
+    double heading = atan2((maps_y.at(wp2) - maps_y.at(prev_wp)), (maps_x.at(wp2) - maps_x.at(prev_wp)));
+
+    // the s,x,y along the segment
+    double seg_s = s - maps_s.at(prev_wp);
     double seg_x = maps_x.at(prev_wp) + seg_s * cos(heading);
     double seg_y = maps_y.at(prev_wp) + seg_s * sin(heading);
 
@@ -162,6 +166,8 @@ DoublePair getXYFromFrenet(const double s,
 
     double x = seg_x + d * cos(perp_heading);
     double y = seg_y + d * sin(perp_heading);
+
+    // std::cout << "out...\n";
 
     return {x, y};
 }

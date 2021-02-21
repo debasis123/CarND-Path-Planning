@@ -2,7 +2,7 @@
  * @Author: Debasis Mandal
  * @Date:   2021-02-07 18:26:33
  * @Last Modified by:   Debasis Mandal
- * @Last Modified time: 2021-02-20 17:16:02
+ * @Last Modified time: 2021-02-21 13:24:58
  */
 
 #include "path_planning.h"
@@ -40,11 +40,12 @@ void PathPlanner::run()
     //
     // GOAL: To drive ego car on the fastest possible way, close to but not exceeding the speed of 50 mph and less jerk.
     //
-    // - we first create 5 anchor points
+    // - we first create 6 anchor points
     //      - first two points from previous trajectory or interpolated points
     //      - then we compute the safe next lane based on path planning: prediction, behavior modeling, trajectory
     //      computation and cost
-    // - use these 5 anchor points as the seed of the spline trajectory
+    //      - use the lane to create next 4 points at 30, 60, 90, and 120 m distance from ego (s values on Frenet)
+    // - use these 6 anchor points as the seed of the spline trajectory
     // - compute 50 points from spline as the trajectory fed to the simulator
     //
     // To compute the next safe lane, we do the following:
@@ -80,15 +81,17 @@ void PathPlanner::run()
     // std::cout << traj_.ego_lane << "   " << traj_.ego_vel << "   " << traj_.ego_state << "    " << traj_.speed_diff
     // << '\n';
 
-    // first create some anchor points to create the spline trajectory
+    // first create some anchor points to create the spline trajectory (on s values of Frenet)
     add_past_anchor_waypoints();
     add_future_anchor_waypoints();
     compute_reference_values();
+
     // and now we transform the s,d values to car coordinates (x, y) for creating spline
     transform_trajectory_to_car_coordinates();
     create_spline_trajectory();
-    // back to global coordinate
-    transform_trajectory_to_global_coordinates();
+
+    // back to global coordinate to send to simulator
+    // transform_trajectory_to_global_coordinates();
 
     // update static variables for next round of simulation
     g_ego_vel = traj_.ego_vel;
@@ -136,7 +139,7 @@ void PathPlanner::add_future_anchor_waypoints()
 
     // std::cout << "lane: " << traj_.ego_lane << "   d: " << ego_next_d << "      s: " << ego_.s_ << '\n';
 
-    for (int i{1}; i < 5; ++i)
+    for (int i{1}; i <= kNumFuturePoints; ++i)
     {
         auto xy = getXYFromFrenet(ego_.s_ + kCollisionDistance * i, ego_next_d, map_.s_, map_.x_, map_.y_);
         traj_x_.push_back(xy.first);
@@ -196,6 +199,7 @@ void PathPlanner::create_spline_trajectory()
     // For the smooth transition, we are adding previous path points
     auto prev_path_size = ego_.prev_path_x_.size();
 
+    // the following points are already in global x-y coordinates
     for (int i = 0; i < prev_path_size; ++i)
     {
         next_x_vals_.push_back(ego_.prev_path_x_.at(i));
@@ -209,6 +213,8 @@ void PathPlanner::create_spline_trajectory()
 
     double x_current = 0;
 
+    // generate new points to make the trajectory size 50
+    // note that these points are first generated in car coordinate and need to be transformed to global coordinate
     for (int i = 0; i < 50 - prev_path_size; ++i)
     {
         traj_.ego_vel += traj_.speed_diff;
@@ -225,8 +231,9 @@ void PathPlanner::create_spline_trajectory()
 
         x_current = x_point;
 
-        next_x_vals_.push_back(x_point);
-        next_y_vals_.push_back(y_point);
+        auto vals = transform_trajectory_to_global_coordinates(x_point, y_point);
+        next_x_vals_.push_back(vals.first);
+        next_y_vals_.push_back(vals.second);
     }
 
     // std::cout << "before transformation: next_x and next_y vals: \n";
@@ -234,21 +241,34 @@ void PathPlanner::create_spline_trajectory()
     // print_vector(next_y_vals_);
 }
 
-void PathPlanner::transform_trajectory_to_global_coordinates()
+DoublePair PathPlanner::transform_trajectory_to_global_coordinates(double x, double y)
 {
-    for (size_t i{ego_.prev_path_x_.size()}; i < 50; ++i)
-    {
-        double cur_x = next_x_vals_.at(i);
-        double cur_y = next_y_vals_.at(i);
+    // for (size_t i{ego_.prev_path_x_.size()}; i < 50; ++i)
+    // {
+    //     double cur_x = next_x_vals_.at(i);
+    //     double cur_y = next_y_vals_.at(i);
 
-        // Rotation
-        next_x_vals_[i] = cur_x * std::cos(ref_.yaw) - cur_y * std::sin(ref_.yaw);
-        next_y_vals_[i] = cur_x * std::sin(ref_.yaw) + cur_y * std::cos(ref_.yaw);
+    //     // Rotation
+    //     next_x_vals_[i] = cur_x * std::cos(ref_.yaw) - cur_y * std::sin(ref_.yaw);
+    //     next_y_vals_[i] = cur_x * std::sin(ref_.yaw) + cur_y * std::cos(ref_.yaw);
 
-        // translation
-        next_x_vals_[i] += ref_.x;
-        next_y_vals_[i] += ref_.y;
-    }
+    //     // translation
+    //     next_x_vals_[i] += ref_.x;
+    //     next_y_vals_[i] += ref_.y;
+    // }
+
+    double cur_x = x;
+    double cur_y = y;
+
+    // Rotation
+    x = cur_x * std::cos(ref_.yaw) - cur_y * std::sin(ref_.yaw);
+    y = cur_x * std::sin(ref_.yaw) + cur_y * std::cos(ref_.yaw);
+
+    // translation
+    x += ref_.x;
+    y += ref_.y;
+
+    return {x, y};
 
     // std::cout << "next_x and next_y vals: \n";
     // print_vector(next_x_vals_);

@@ -39,7 +39,7 @@ private:
      * create a spline out of the trajectory points
      */
     void create_spline_trajectory();
-    void transform_trajectory_to_global_coordinates();
+    DoublePair transform_trajectory_to_global_coordinates(double x, double y);
 
     Ego& ego_;
     std::vector<double>& next_x_vals_;
